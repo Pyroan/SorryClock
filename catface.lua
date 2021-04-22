@@ -16,7 +16,7 @@ end
 
 function CatFace:draw()
     -- love.graphics.print("x: " .. self.x .. "\ny: " .. self.y)
-    oldcolor = {love.graphics.getColor()}
+    local oldcolor = {love.graphics.getColor()}
     for i = 1, 20 do
         self:drawLayer(i / 20)
     end
@@ -25,20 +25,20 @@ end
 
 function CatFace:drawLayer(offset)
     -- infinity-sign loop
-    loopcompletion = self.timesincelastloop / self.looplength
-    offx = -math.sin(tau * loopcompletion + offset) * 30 * 2
-    offy = math.sin(2 * tau * loopcompletion + offset) * 30 -- / 2
+    local loopcompletion = self.timesincelastloop / self.looplength
+    local offx = -math.sin(tau * loopcompletion + offset) * 30 * 2
+    local offy = math.sin(2 * tau * loopcompletion + offset) * 30 -- / 2
 
-    rot = -math.cos(tau * loopcompletion + offset) * (tau / 80)
+    local rot = -math.cos(tau * loopcompletion + offset) * (tau / 80)
 
-    w, h = love.window.getMode()
+    local w, h = love.window.getMode()
     self.x = (w / 2) + offx
     self.y = (h / 2) + offy
     self.rotation = rot
 
     love.graphics.setColor(colorLerp(self.colors[1], self.colors[2], 1 - offset))
 
-    tw, th = self.text.getDimensions(self.text)
+    local tw, th = self.text.getDimensions(self.text)
     love.graphics.draw(self.text, self.x, self.y, self.rotation, 1, 1, tw / 2, th / 2)
 end
 
