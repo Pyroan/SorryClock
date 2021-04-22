@@ -1,7 +1,11 @@
 require "color"
 
+local Config = love.filesystem.load("config.lua")()
+
 colors = {
-    pink = {color(224, 16, 214)},
-    blue = {color(24, 201, 245)},
-    gold = {color(255, 229, 36)}
+    pink = Config.dotColor,
+    blue = Config.backgroundColor,
+    gold = Config.textPrimaryColor,
 }
+
+floatingText= Config.text;

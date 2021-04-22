@@ -12,7 +12,7 @@ CatFace = {
 
 function CatFace:inittext()
     local font = love.graphics.newFont("ARCADE_N.TTF", 64)
-    self.text = love.graphics.newText(font, "Just Walk Out")
+    self.text = love.graphics.newText(font, floatingText)
 end
 
 function CatFace:draw()
