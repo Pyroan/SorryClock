@@ -4,8 +4,9 @@ CatFace = {
     x = 0,
     y = 0,
     rotation = 0,
-    timesincelastloop = 0.0,
-    looplength = 5.0,
+    maxAngle = tau / 80,
+    timeSinceLastLoop = 0.0,
+    loopLength = 5.0,
     colors = {colors["gold"], colors["pink"]}
 }
 
@@ -16,25 +17,24 @@ end
 
 function CatFace:draw()
     -- love.graphics.print("x: " .. self.x .. "\ny: " .. self.y)
-    local oldcolor = {love.graphics.getColor()}
+    local oldColor = {love.graphics.getColor()}
     for i = 1, 20 do
         self:drawLayer(i / 20)
     end
-    love.graphics.setColor(oldcolor)
+    love.graphics.setColor(oldColor)
 end
 
 function CatFace:drawLayer(offset)
     -- infinity-sign loop
-    local loopcompletion = self.timesincelastloop / self.looplength
-    local offx = -math.sin(tau * loopcompletion + offset) * 30 * 2
-    local offy = math.sin(2 * tau * loopcompletion + offset) * 30 -- / 2
-
-    local rot = -math.cos(tau * loopcompletion + offset) * (tau / 80)
+    local loopCompletion = self.timeSinceLastLoop / self.loopLength
+    local t = tau * loopCompletion + offset
+    local offX = -math.sin(t) * 30 * 2
+    local offY = math.sin(2 * t) * 30 -- / 2
 
     local w, h = love.window.getMode()
-    self.x = (w / 2) + offx
-    self.y = (h / 2) + offy
-    self.rotation = rot
+    self.x = (w / 2) + offX
+    self.y = (h / 2) + offY
+    self.rotation = -math.cos(t) * self.maxAngle
 
     love.graphics.setColor(colorLerp(self.colors[1], self.colors[2], 1 - offset))
 
@@ -44,9 +44,9 @@ end
 
 function CatFace:update(dt)
 
-    self.timesincelastloop = self.timesincelastloop + dt
-    if self.timesincelastloop > self.looplength then
-        self.timesincelastloop = self.timesincelastloop - self.looplength
+    self.timeSinceLastLoop = self.timeSinceLastLoop + dt
+    if self.timeSinceLastLoop > self.loopLength then
+        self.timeSinceLastLoop = self.timeSinceLastLoop - self.loopLength
     end
 
 end
