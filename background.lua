@@ -9,39 +9,52 @@ Background = {
         pink = colors["pink"],
         blue = colors["blue"]
     },
-    looptime = 10.0,
-    timesincelastloop = 0.0,
+    loopTime = 10.0,
+    timeSinceLastLoop = 0.0,
     rotation = tau / 20
 }
 
 function Background:draw()
-    local loopcompleteness = self.timesincelastloop / self.looptime
     -- going for like a circle/halftone effect here
-    love.graphics.clear(unpack(colorLerp(self.colors["blue"], self.colors["pink"],
-                                   (-math.cos(tau * loopcompleteness) + 1) / 2)))
-    local oldcolor = {love.graphics.getColor()}
-    love.graphics.setColor(colorLerp(self.colors["pink"], self.colors["blue"],
-                               (-math.cos(tau * loopcompleteness) + 1) / 2))
+    local loopCompleteness = self.timeSinceLastLoop / self.loopTime
+    local colorLerpAmount = (-math.cos(tau * loopCompleteness) + 1) / 2
+    local oldColor = {love.graphics.getColor()}
+
+    -- background
+    love.graphics.clear(unpack(colorLerp(self.colors["blue"], self.colors["pink"], colorLerpAmount)))
+    -- circles
+    love.graphics.setColor(colorLerp(self.colors["pink"], self.colors["blue"], colorLerpAmount))
     for i = 1, self.cols do
         for j = 1, self.rows do
-            local x = (i * self.spacing) + ((j % 2 * self.spacing) / 2 - self.spacing)
-            local y = (j * self.spacing) * math.sqrt(0.75) - (self.timesincelastloop * 10) - 12 * self.spacing
+            local x = i * self.spacing
+            -- offset every other row by half a space
+            x = x + (j % 2) * (self.spacing / 2)
+            -- offset by a column to make sure whole screen is filled
+            x = x - self.spacing
+
+            local y = j * self.spacing
+            -- makes dots equidistant
+            y = y * math.sqrt(0.75)
+            -- makes dots move upward
+            -- TODO make this a perfect loop
+            y = y - (loopCompleteness * 100)
+            -- offset by 12 rows to make sure whole screen is filled
+            y = y - 12 * self.spacing
 
             -- rotation
-            x = x * math.cos(self.rotation) - y * math.sin(self.rotation)
-            y = x * math.sin(self.rotation) + y * math.cos(self.rotation)
+            x, y = rotatePoint(x, y, self.rotation)
 
-            local size = (math.cos(tau * loopcompleteness + j / self.rows)) * (self.spacing * .60)
+            local size = (math.cos(tau * loopCompleteness + j / self.rows)) * (self.spacing * .60)
             love.graphics.circle("fill", x, y, size)
         end
     end
 
-    love.graphics.setColor(oldcolor)
+    love.graphics.setColor(oldColor)
 end
 
 function Background:update(dt)
-    self.timesincelastloop = self.timesincelastloop + dt
-    if self.timesincelastloop > self.looptime then
-        self.timesincelastloop = self.timesincelastloop - self.looptime
+    self.timeSinceLastLoop = self.timeSinceLastLoop + dt
+    if self.timeSinceLastLoop > self.loopTime then
+        self.timeSinceLastLoop = self.timeSinceLastLoop - self.loopTime
     end
 end
