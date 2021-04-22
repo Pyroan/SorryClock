@@ -1,9 +1,9 @@
 require "color"
 
 Config = {
-    backgroundColor = {color(255, 0, 0)},
-    dotColor = {color(0, 255, 0)},
-    textPrimaryColor = {color(0, 0, 255)},
+    backgroundColor = {color(24, 201, 245)},
+    dotColor = {color(224, 16, 214)},
+    textPrimaryColor = {color(255, 229, 36)},
     text = "Hello World"
 }
 
