@@ -5,10 +5,6 @@ Background = {
     rows = 40,
     cols = 100,
     spacing = 30,
-    colors = {
-        pink = colors["pink"],
-        blue = colors["blue"]
-    },
     loopTime = 10.0,
     timeSinceLastLoop = 0.0,
     rotation = tau / 20
@@ -21,9 +17,9 @@ function Background:draw()
     local oldColor = {love.graphics.getColor()}
 
     -- background
-    love.graphics.clear(unpack(colorLerp(self.colors["blue"], self.colors["pink"], colorLerpAmount)))
+    love.graphics.clear(unpack(colorLerp(theme.bgPrimary, theme.bgSecondary, colorLerpAmount)))
     -- circles
-    love.graphics.setColor(colorLerp(self.colors["pink"], self.colors["blue"], colorLerpAmount))
+    love.graphics.setColor(colorLerp(theme["bgSecondary"], theme["bgPrimary"], colorLerpAmount))
     for i = 1, self.cols do
         for j = 1, self.rows do
             local x = i * self.spacing

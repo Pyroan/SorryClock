@@ -7,11 +7,10 @@ CatFace = {
     maxAngle = tau / 80,
     timeSinceLastLoop = 0.0,
     loopLength = 5.0,
-    colors = {colors["gold"], colors["pink"]}
 }
 
 function CatFace:inittext()
-    local font = love.graphics.newFont("ARCADE_N.TTF", 64)
+    local font = love.graphics.newFont("ARCADE_N.TTF", fontSize)
     self.text = love.graphics.newText(font, floatingText)
 end
 
@@ -36,7 +35,7 @@ function CatFace:drawLayer(offset)
     self.y = (h / 2) + offY
     self.rotation = -math.cos(t) * self.maxAngle
 
-    love.graphics.setColor(colorLerp(self.colors[1], self.colors[2], 1 - offset))
+    love.graphics.setColor(colorLerp(theme.textPrimary, theme.textSecondary, 1 - offset))
 
     local tw, th = self.text.getDimensions(self.text)
     love.graphics.draw(self.text, self.x, self.y, self.rotation, 1, 1, tw / 2, th / 2)
@@ -48,5 +47,7 @@ function CatFace:update(dt)
     if self.timeSinceLastLoop > self.loopLength then
         self.timeSinceLastLoop = self.timeSinceLastLoop - self.loopLength
     end
+
+    self.text:set(os.date("%I:%M"))
 
 end
